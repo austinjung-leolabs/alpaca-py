@@ -1,5 +1,6 @@
 # Import standard library modules
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import os
 import time
 from datetime import datetime, timedelta, timezone
@@ -460,12 +461,23 @@ def near_fibonacci_support(df: pd.DataFrame, tolerance: float = 0.005) -> bool:
 
 def main():
     """Enhanced trading loop with full indicator suite."""
-    logging.basicConfig(
-        filename="trade_log.txt",
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
+    # Rotating log: new file each day, keep 30 days, filename includes the date
+    log_handler = TimedRotatingFileHandler(
+        filename="trade_log.txt",  # rotated files get a date suffix: trade_log.txt.2026-08-12
+        when="midnight",           # rotate at midnight UTC
+        interval=1,                # every 1 day
+        backupCount=30,            # keep 30 days of history
+        encoding="utf-8",
+        utc=True,
     )
+    log_handler.suffix = "%Y-%m-%d"
+    log_handler.setFormatter(logging.Formatter(
+        fmt="%(asctime)s %(levelname)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    ))
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    root_logger.addHandler(log_handler)
     logging.info("=== Enhanced Strategy started ===")
 
     # remembers whether the market was open in the previous iteration
