@@ -30,7 +30,7 @@ from alpaca.trading.requests import LimitOrderRequest, MarketOrderRequest
 
 
 # ── Timezone ──────────────────────────────────────────────────────────────────
-PACIFIC_TZ = ZoneInfo('America/Los_Angeles')
+NY_TZ = ZoneInfo('America/New_York')
 
 # ── Symbol ────────────────────────────────────────────────────────────────────
 underlying_symbol = 'TQQQ'
@@ -94,7 +94,7 @@ def fetch_bars(
     days: int = 90,
 ) -> pd.DataFrame:
     """Fetch OHLCV bars from Alpaca for the given symbol and lookback window."""
-    today = datetime.now(PACIFIC_TZ).date()
+    today = datetime.now(NY_TZ).date()
     req = StockBarsRequest(
         symbol_or_symbols=[symbol],
         timeframe=TimeFrame(amount=1, unit=timeframe_unit),

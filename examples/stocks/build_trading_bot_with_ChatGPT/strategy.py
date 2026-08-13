@@ -31,7 +31,7 @@ from alpaca.trading.requests import LimitOrderRequest, MarketOrderRequest
 
 
 # Set the local timezone
-PACIFIC_TZ = ZoneInfo('America/Los_Angeles')
+NY_TZ = ZoneInfo('America/New_York')
 
 # Select the stock (ProShares UltraPro QQQ)
 underlying_symbol = 'TQQQ'
@@ -88,7 +88,7 @@ def sleep_until(target_time, chunk_seconds=30):
         
 # Helper: Fetch recent bar data  
 def fetch_bars(client: StockHistoricalDataClient, underlying_symbol: str, timeframe_unit: TimeFrameUnit, days: int = 90) -> pd.DataFrame:
-    today = datetime.now(PACIFIC_TZ).date()
+    today = datetime.now(NY_TZ).date()
     req = StockBarsRequest(
         symbol_or_symbols=[underlying_symbol],
         timeframe=TimeFrame(amount=1, unit=timeframe_unit),  # specify timeframe
